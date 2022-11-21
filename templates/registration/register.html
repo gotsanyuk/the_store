@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% extends 'base.html'%}
+  {% load static %}
+
+  {% block title %}
+  Registrations
+  {% endblock title %}
+
+  {% block content %}
+<body>
+  <!--================Login Box Area =================-->
+	<section class="login_box_area section-margin">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="login_box_img">
+						<div class="hover">
+							<h4>Вже є аккаунт?</h4>
+							<p>Наука й технології досягають прогресу щодня, і це не проходить повз вас</p>
+							<a class="button button-account" href="{% url 'login' %}">Зайти у свій акаунт</a>
+						</div>{% csrf_token %}
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="login_form_inner register_form_inner">
+						<h3>Починайте творити тут</h3>
+						<form class="row login_form" method="post" action="{% url 'register' %}" id="register_form" >
+							{% csrf_token %}
+							{% if form.errors %}
+							<p>Щось тут не так, давайте спробуймо ще раз, більш уважно. Чи ви взагалі нічого не вводили?<hr></p>
+							{% endif %}
+							<div class="col-md-12 form-group">
+								<input type="text" class="form-control" id="username" name="username" placeholder="Введіть логін" onfocus="this.placeholder = 'щось просте, без пробілів і дивних знаків'" onblur="this.placeholder = 'Логін'">
+							</div>
+							<div class="col-md-12 form-group">
+								<input type="text" class="form-control" id="email" name="email" placeholder="Введіть Email" onfocus="this.placeholder = 'зразок: something@domen.com'" onblur="this.placeholder = 'Email адреса'">
+              				</div>
+              				<div class="col-md-12 form-group">
+								<input type="text" class="form-control" id="password1" name="password1" placeholder="Введіть пароль" onfocus="this.placeholder = 'мінімум 8 символів (букви, цифри, знаки)'" onblur="this.placeholder = 'Ваш пароль'">
+              				</div>
+              				<div class="col-md-12 form-group">	
+								<input type="text" class="form-control" id="password2" name="password2" placeholder="Введіть пароль" onfocus="this.placeholder = 'той самий пароль, що ви вводили вище'" onblur="this.placeholder = 'Ваш пароль'">
+							</div>
+							<div class="col-md-12 form-group">
+								<button type="submit" value="submit" class="button button-register w-100">Реєструйте бігом</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--================End Login Box Area =================-->
+</body>
+{% endblock content %}
+</html>

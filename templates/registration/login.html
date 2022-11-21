@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% extends 'base.html'%}
+  {% load static %}
+
+  {% block title %}
+  Autorizatoins
+  {% endblock title %}
+
+  {% block content %}
+<body>
+  <!--================Login Box Area =================-->
+	<section class="login_box_area section-margin">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="login_box_img">
+						<div class="hover">
+							<h4>Вперше на нашому веб-сайті?</h4>
+							<p>Наука й технології досягають прогресу щодня, і гарним прикладом цього є</p>
+							<a class="button button-account" href="{% url 'register' %}">Створити новий акаунт</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="login_form_inner">
+						<h3>Тут цікаво, заходьте</h3>
+						<form method="post" class="row login_form" action="{% url 'login' %}" id="contactForm" >
+							<div class="col-md-12 form-group">
+								{% if form.errors %}
+							<p>Отакої :( Ви ввели неправильні дані...<hr></p>
+							{% endif %}
+								{% csrf_token %}
+							<div class="col-md-12 form-group" for="id_username">
+								<input type="text" class="form-control" id="id_username" name="username" placeholder="Введіть логін" onfocus="this.placeholder = 'Перевірте розкладку і вперед'" onblur="this.placeholder = 'Логін'">
+							</div>
+							<div class="col-md-12 form-group" for="id_password">
+								<input type="password" class="form-control" id="id_password" name="password" placeholder="Введіть пароль" onfocus="this.placeholder = 'Перевірте CAPS-LOCK і тицяйте'" onblur="this.placeholder = 'Пароль'">
+							</div>
+							<div class="col-md-12 form-group">
+								<button type="submit" value="submit" class="button button-login w-100">Готово</button>
+								<a href="{% url 'password_reset' %}">Забули пароль?</a>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--================End Login Box Area =================-->
+</body>
+</html>
+{% endblock content %}

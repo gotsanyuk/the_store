@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% extends 'base.html'%}
+  {% load static %}
+
+  {% block title %}
+  Корзина покупок
+  {% endblock title %}
+
+  {% block content %}
+
+
+  <!--================Cart Area =================-->
+  <section class="cart_area">
+      <div class="container">
+          <div class="cart_inner">
+              <div class="table-responsive">
+                  <table class="table">
+                      <thead>
+                          <tr>
+                              <th scope="col">Назва</th>
+                              <th scope="col">Ціна</th>
+                              <th scope="col">Кількість</th>
+                              <th scope="col">Сума</th>
+
+                          </tr>
+                      </thead>
+                      {% for item in cart %}
+                      <tbody>
+                          <tr>
+                              <td>
+                                  <div class="media">
+                                      <div class="d-flex">
+                                          <img src="{{ item.product.image_url }}" width="100px" height="100px" alt="">
+                                      </div>
+                                      <div class="media-body">
+                                          <p>{{ item.product }}</p>
+                                      </div>
+                                  </div>
+                              </td>
+                              <td>
+                                  <h5>${{ item.price }}</h5>
+                              </td>
+                              <td>
+
+
+                                    <form action="{% url 'cart:cart_add' item.product.id %}" method="post">
+                                    {{ item.update_quantity_form.quantity }}
+
+                                    {{ item.update_quantity_form.update }}
+
+                                        <button type="action" class="btn btn-outline-secondary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                                        <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"></path>
+                                        <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"></path>
+                                        </svg></button></div>
+
+                                        {% csrf_token %}
+                                        </form>
+
+                              </td>
+
+                              <td>
+                                  <h5>${{ item.total_price }}</h5>
+                                  <td>
+                                <a href="{% url 'cart:cart_remove' item.product.id %}" class="btn btn-outline-danger">Видалити</a>
+                              </td>
+                              </td>
+
+
+
+                              {% endfor %}
+                          </tr>
+               
+
+
+                          <tr class="bottom_button">
+ {% if cart.coupon %}
+                              <td>
+Ви успішно активували купон "{{ cart.coupon.code }}"
+                              </td>
+                              <td>
+Ваша знижка {{ cart.coupon.discount }}%
+
+                              </td>
+                              <td>
+Попередня сума ${{ cart.get_total_price }}
+                              </td>
+
+                              <td>
+- ${{ cart.get_discount|floatformat:"2" }}
+                              </td>
+                              <td>
+{% endif %}
+                              </td>
+                          </tr>
+                          <tr>
+<td>
+    {% if user.is_authenticated %}
+    {% if not cart.coupon %}
+<form action="{% url 'cart:coupon_apply' %}" method="post">
+
+    <input type="text" class="form-control" name="code" required="" placeholder=" код на знижку вводити тут" onfocus="this.placeholder = 'якщо робочий то запрацює, якщо ні то ні'" onblur="this.placeholder = ' код на знижку '" id="id_code">
+{% endif %}
+    {% endif %}
+                                      {% csrf_token %}
+</td>
+
+                            <td>
+{% if not cart.coupon %}{% if user.is_authenticated %}
+
+<button type="submit" class="btn btn-dark btn-rounded"><i class="fas fa-check text-dark rounded-circle bg-white mr-1" style="padding: 7px;"></i> SALE</button></form>
+
+{% endif %}
+                              {% endif %}
+
+                              <td>
+                                  {% if user.is_authenticated %}<h5>Загальна сума</h5>{% endif %}
+                              </td>
+
+                              <td>
+                                  <h5>${{ cart.get_total_price_after_discount|floatformat:"2" }}</h5>
+                              </td>
+                              <td>
+
+                              </td>
+                          </tr>
+
+                          <tr class="out_button_area">
+                              <td class="d-none-l">
+
+
+                              </td>
+
+                              <td class="">
+
+
+<td>
+
+                              </td>
+
+
+ </td>
+                              <td>
+
+                              </td>
+
+                              <td>
+
+                                  <div class="checkout_btn_inner d-flex align-items-center">
+
+                                      <a class="gray_btn" href="{% url 'store:category_show' %}">Продовжити покупки</a>
+                                      {% with total_items=cart|length %}
+                                        {% if cart|length > 0 %}
+                                      <a class="primary-btn ml-2" href="{% url 'orders:order_create' %}">Оформити</a>
+                                      {% endif %}
+                                      {% endwith %}
+                                  </div>
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+  </section>
+  <!--================End Cart Area =================-->
+  {% endblock content %}
